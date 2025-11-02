@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Aan de Kade</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: #f5f1e8;
+            color: #2a2a2a;
+        }
+
+        /* Match the menu color palette exactly */
+        :root {
+            --blue: #4a9bb5;
+            --cream: #f5f1e8;
+            --dark: #2a2a2a;
+            --wood: #8b7355;
+        }
+
+        /* The signature blue lines from menu */
+        .blue-line {
+            height: 3px;
+            background: var(--blue);
+            width: 100%;
+        }
+
+        .blue-line-short {
+            height: 3px;
+            background: var(--blue);
+            width: 70%;
+        }
+
+        /* Logo style matching menu */
+        .logo-text {
+            font-weight: 300;
+            font-size: 0.875rem;
+            letter-spacing: 0.2em;
+            color: var(--blue);
+            text-transform: uppercase;
+        }
+
+        .logo-kade {
+            font-weight: 300;
+            font-size: 3rem;
+            letter-spacing: 0.15em;
+            color: var(--blue);
+            text-transform: uppercase;
+            -webkit-text-stroke: 1.5px var(--blue);
+            -webkit-text-fill-color: transparent;
+            text-stroke: 1.5px var(--blue);
+            text-fill-color: transparent;
+        }
+
+        /* Clean, minimal typography */
+        .heading {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: var(--blue);
+            text-transform: lowercase;
+        }
+
+        .subheading {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: var(--blue);
+        }
+
+        /* Menu item style matching actual menu */
+        .menu-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(74, 155, 181, 0.1);
+        }
+
+        .menu-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .menu-price {
+            font-weight: 500;
+            color: var(--dark);
+            min-width: 60px;
+            text-align: right;
+        }
+
+        /* Status badge - minimal */
+        .status-minimal {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+            background: white;
+            border: 2px solid var(--blue);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--blue);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+        }
+
+        .status-dot.open {
+            background: #4ade80;
+        }
+
+        .status-dot.closed {
+            background: #d1d5db;
+        }
+
+        /* Button style - minimal */
+        .btn-minimal {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--blue);
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .btn-minimal:hover {
+            background: #3a8ba5;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 2px solid var(--blue);
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--blue);
+            color: white;
+        }
+
+        /* Day selector - minimal */
+        .day-select {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 1px solid var(--blue);
+            color: var(--dark);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .day-select:hover:not(.closed) {
+            background: var(--blue);
+            color: white;
+        }
+
+        .day-select.active {
+            background: var(--blue);
+            color: white;
+        }
+
+        .day-select.closed {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Paper card effect */
+        .paper-card {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Navigation */
+        .nav-minimal {
+            background: rgba(245, 241, 232, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(74, 155, 181, 0.2);
+        }
+
+        /* Smooth transitions */
+        .ease {
+            transition: all 0.3s ease;
+        }
+
+        /* Image styling */
+        .img-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Event card - clean */
+        .event-card {
+            background: white;
+            border-left: 4px solid var(--blue);
+            padding: 2rem;
+            transition: transform 0.2s ease;
+        }
+
+        .event-card:hover {
+            transform: translateX(4px);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--cream);
+            transition: right 0.3s ease;
+            z-index: 200;
+        }
+
+        .mobile-menu.open {
+            right: 0;
+        }
+
+        /* Wood texture background */
+        .wood-bg {
+            background-image: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="%238b7355"/><path d="M0 0 L100 100 M100 0 L0 100" stroke="%23795f45" stroke-width="0.5" opacity="0.2"/></svg>');
+            background-size: 50px 50px;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const BarAanDeKade = () => {
+            const [currentTime, setCurrentTime] = useState(new Date());
+            const [isOpen, setIsOpen] = useState(false);
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const [selectedDay, setSelectedDay] = useState('wo');
+
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    const now = new Date();
+                    setCurrentTime(now);
+
+                    const hour = now.getHours();
+                    const day = now.getDay();
+
+                    if (day === 0) {
+                        setIsOpen(hour >= 16 || hour < 1);
+                    } else if (day >= 3 && day <= 4) {
+                        setIsOpen(hour >= 16 || hour < 1);
+                    } else if (day === 5 || day === 6) {
+                        setIsOpen(hour >= 16 || hour < 3);
+                    } else {
+                        setIsOpen(false);
+                    }
+                }, 1000);
+
+                return () => clearInterval(timer);
+            }, []);
+
+            const borrelhapjes = [
+                { name: 'Bitterballen', price: '7,5' },
+                { name: 'Vlammetjes', price: '7,5' },
+                { name: 'Calamares met aioli', price: '7,5' },
+                { name: 'Vegaballen van mosterzwam', price: '7,5' },
+                { name: 'Kaasstengels (8 stuks)', price: '8' },
+                { name: 'Bittergarnituur (mix van hierboven)', price: '15' },
+                { name: 'Olijven', price: '5' },
+                { name: 'Gerookte amandelen', price: '5' },
+                { name: 'Vers gebrande notenmix', price: '6,5' },
+                { name: "Nacho's bowl (kaas, bonen, guacamole, tomaat)", price: '15' },
+                { name: 'Gemarineerde artisjokkenharten', price: '7' },
+                { name: 'Hartige taart van groenten', price: '6,5' },
+                { name: "Franse droge worst a l'ancienne", price: '8,5' },
+                { name: 'Paté met Fort Negen brood', price: '9,5' },
+                { name: "Mark's huisgerookte zalm met toast en sausje", price: '16,5' },
+                { name: 'Boquerones', price: '7,5' },
+                { name: 'Brood van Fort Negen met zoute boter en olijfolie', price: '7,5' },
+                { name: 'Frietje met saus', price: '5,5' }
+            ];
+
+            const weekMenu = {
+                ma: { name: 'maandag', dish: 'gesloten', desc: '', price: '', closed: true },
+                di: { name: 'dinsdag', dish: 'gesloten', desc: '', price: '', closed: true },
+                wo: { name: 'woensdag', dish: 'stamppot van de week', desc: 'klassieke nederlandse stamppot met rookworst en mosterd', price: '13,50', closed: false },
+                do: { name: 'donderdag', dish: 'tapas avond', desc: 'selectie van zes spaanse tapas, perfect om te delen', price: '26', closed: false },
+                vr: { name: 'vrijdag', dish: 'fish & chips', desc: 'verse vis van de dag met friet en huisgemaakte tartaarsaus', price: '16', closed: false },
+                za: { name: 'zaterdag', dish: 'signature burger', desc: 'dry-aged rundvlees met truffelmayonaise en friet', price: '17,50', closed: false },
+                zo: { name: 'zondag', dish: 'borrelplank deluxe', desc: 'premium kazen, charcuterie en vers brood', price: '18', closed: false }
+            };
+
+            const getCurrentDay = () => {
+                const days = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+                return days[currentTime.getDay()];
+            };
+
+            const todayKey = getCurrentDay();
+            const menu = weekMenu[selectedDay];
+
+            return (
+                <div>
+                    {/* Status Badge */}
+                    <div className="status-minimal hidden md:block">
+                        <span className={`status-dot ${isOpen ? 'open' : 'closed'}`}></span>
+                        {isOpen ? 'open' : 'gesloten'}
+                    </div>
+
+                    {/* Navigation */}
+                    <nav className="nav-minimal fixed top-0 w-full z-50">
+                        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                            <div>
+                                <div className="logo-text">bar aan de</div>
+                                <div className="logo-kade">kade</div>
+                            </div>
+
+                            <div className="hidden md:flex items-center gap-10">
+                                <a href="#verhaal" className="text-sm uppercase tracking-wider text-dark hover:text-blue ease font-medium">verhaal</a>
+                                <a href="#menu" className="text-sm uppercase tracking-wider text-dark hover:text-blue ease font-medium">menu</a>
+                                <a href="#events" className="text-sm uppercase tracking-wider text-dark hover:text-blue ease font-medium">events</a>
+                                <a href="#contact" className="text-sm uppercase tracking-wider text-dark hover:text-blue ease font-medium">contact</a>
+                                <a href="tel:+31202238553" className="text-sm uppercase tracking-wider text-blue border-b-2 border-blue font-medium">
+                                    reserveren
+                                </a>
+                            </div>
+
+                            <button
+                                onClick={() => setMobileMenuOpen(true)}
+                                className="md:hidden text-blue"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </nav>
+
+                    {/* Mobile Menu */}
+                    <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
+                        <div className="p-8">
+                            <button onClick={() => setMobileMenuOpen(false)} className="mb-12 text-blue">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <div className="space-y-8 text-2xl">
+                                <a href="#verhaal" onClick={() => setMobileMenuOpen(false)} className="block text-dark hover:text-blue ease">verhaal</a>
+                                <a href="#menu" onClick={() => setMobileMenuOpen(false)} className="block text-dark hover:text-blue ease">menu</a>
+                                <a href="#events" onClick={() => setMobileMenuOpen(false)} className="block text-dark hover:text-blue ease">events</a>
+                                <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-dark hover:text-blue ease">contact</a>
+                                <a href="tel:+31202238553" className="block text-blue font-bold">reserveren →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Hero */}
+                    <div className="relative min-h-screen flex items-end pb-32 px-6">
+                        <div
+                            className="absolute inset-0"
+                            style={{
+                                backgroundImage: "url('https://static.wixstatic.com/media/0b6c9c_68bc22cb03e3438b8753468b9195f5be~mv2.jpg/v1/fill/w_1920,h_1080,al_c,q_90/0b6c9c_68bc22cb03e3438b8753468b9195f5be~mv2.jpg')",
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center'
+                            }}
+                        ></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-cream via-cream/80 to-cream/40"></div>
+
+                        <div className="relative z-10 max-w-7xl mx-auto w-full">
+                            <div className="blue-line-short mb-6"></div>
+
+                            <h1 className="text-5xl md:text-7xl font-light text-white mb-6 leading-tight" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                                lekker eten<br />
+                                en drinken<br />
+                                in de buurt
+                            </h1>
+                            <p className="text-xl md:text-2xl text-white mb-8 font-light" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.5)' }}>
+                                linnaeuskade 1-ah, amsterdam oost
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <a href="#menu" className="btn-minimal">menu bekijken</a>
+                                <a href="tel:+31202238553" className="btn-minimal" style={{ background: 'white', color: 'var(--blue)' }}>020 223 8553</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Today's Special */}
+                    {!weekMenu[todayKey].closed && (
+                        <div className="py-16 px-6 bg-blue">
+                            <div className="max-w-4xl mx-auto text-center text-white">
+                                <p className="text-sm uppercase tracking-widest mb-4 opacity-90">vandaag • {weekMenu[todayKey].name}</p>
+                                <h2 className="text-4xl md:text-5xl font-light mb-4">{weekMenu[todayKey].dish}</h2>
+                                <p className="text-lg mb-6 opacity-90">{weekMenu[todayKey].desc}</p>
+                                <p className="text-4xl font-light">€{weekMenu[todayKey].price}</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Het Verhaal */}
+                    <section id="verhaal" className="py-24 px-6 bg-cream">
+                        <div className="max-w-5xl mx-auto">
+                            <div className="blue-line mb-2"></div>
+                            <div className="blue-line-short mb-12"></div>
+
+                            <h2 className="heading mb-12">het verhaal</h2>
+
+                            <div className="grid md:grid-cols-2 gap-12 items-start">
+                                <div className="space-y-6 text-lg text-dark leading-relaxed">
+                                    <p>
+                                        bar aan de kade is gestart door mark joenje omdat hij in de buurt een plek miste met het juiste sfeertje.
+                                        een soort buurt bistro of petit restaurant of een bar waar je ook lekker kan eten.
+                                    </p>
+                                    <p>
+                                        waar je nieuwe mensen ontmoet en bekenden treft. waar af en toe iets georganiseerd wordt zoals
+                                        een pubquiz of spaanse week of silent disco en een thema dag over duurzaamheid.
+                                    </p>
+                                    <p>
+                                        een plek waar je terugkomt om steeds iets nieuws te proeven, want het menu wisselt regelmatig.
+                                        een soort huiskamer, waar het vertrouwd is, maar waar je toch steeds verrast wordt.
+                                    </p>
+                                    <p className="text-xl font-medium text-blue pt-4">
+                                        zo'n plek wil bar aan de kade zijn voor iedereen.
+                                    </p>
+                                </div>
+
+                                <div className="paper-card p-8">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80"
+                                        alt="Bar interior"
+                                        className="w-full h-80 object-cover mb-4"
+                                    />
+                                    <p className="text-sm text-gray-600 text-center">waar de buurt elkaar vindt</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Borrelhapjes Menu */}
+                    <section id="menu" className="py-24 px-6 bg-white">
+                        <div className="max-w-4xl mx-auto">
+                            <div className="blue-line mb-2"></div>
+                            <div className="blue-line-short mb-12"></div>
+
+                            <h2 className="heading mb-12 text-center">borrelhapjes</h2>
+
+                            <div className="paper-card p-12">
+                                <div className="space-y-2">
+                                    {borrelhapjes.map((item, i) => (
+                                        <div key={i} className="menu-item-row">
+                                            <span className="text-dark">{item.name}</span>
+                                            <span className="menu-price">{item.price}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Weekly Special */}
+                    <section className="py-24 px-6 bg-cream">
+                        <div className="max-w-5xl mx-auto">
+                            <div className="blue-line mb-2"></div>
+                            <div className="blue-line-short mb-12"></div>
+
+                            <h2 className="heading mb-12 text-center">deze week speciaal</h2>
+
+                            {/* Day Selector */}
+                            <div className="flex flex-wrap justify-center gap-3 mb-12">
+                                {Object.entries(weekMenu).map(([key, day]) => (
+                                    <button
+                                        key={key}
+                                        onClick={() => !day.closed && setSelectedDay(key)}
+                                        disabled={day.closed}
+                                        className={`day-select ${selectedDay === key ? 'active' : ''} ${day.closed ? 'closed' : ''}`}
+                                    >
+                                        {day.name}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Selected Day */}
+                            {menu.closed ? (
+                                <div className="paper-card p-12 text-center">
+                                    <p className="text-2xl text-gray-400 font-light">gesloten</p>
+                                </div>
+                            ) : (
+                                <div className="paper-card p-12">
+                                    <div className="text-center">
+                                        <p className="text-sm uppercase tracking-widest text-blue mb-4">{menu.name}</p>
+                                        <h3 className="text-3xl md:text-4xl font-light text-dark mb-4">{menu.dish}</h3>
+                                        <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">{menu.desc}</p>
+                                        <div className="flex items-center justify-center gap-8 mb-8">
+                                            <div className="blue-line-short" style={{ width: '80px' }}></div>
+                                            <p className="text-4xl font-light text-blue">€{menu.price}</p>
+                                            <div className="blue-line-short" style={{ width: '80px' }}></div>
+                                        </div>
+                                        <a href="tel:+31202238553" className="btn-minimal">reserveer voor {menu.name}</a>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+
+                    {/* Events */}
+                    <section id="events" className="py-24 px-6 bg-white">
+                        <div className="max-w-5xl mx-auto">
+                            <div className="blue-line mb-2"></div>
+                            <div className="blue-line-short mb-12"></div>
+
+                            <h2 className="heading mb-12 text-center">aankomende events</h2>
+
+                            <div className="space-y-6">
+                                {[
+                                    { date: '07 nov', title: 'pubquiz avond', time: '20:00', tag: 'vol' },
+                                    { date: '14 nov', title: 'silent disco', time: '22:00', tag: 'nieuw' },
+                                    { date: '21 nov', title: 'wine & cheese night', time: '19:00', tag: '' },
+                                    { date: '28 nov', title: 'duurzaamheid café', time: '18:30', tag: 'gratis' }
+                                ].map((event, i) => (
+                                    <div key={i} className="event-card">
+                                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                            <div className="flex items-center gap-6">
+                                                <div className="text-blue">
+                                                    <p className="text-2xl font-light">{event.date}</p>
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-xl font-medium text-dark mb-1">{event.title}</h3>
+                                                    <p className="text-sm text-gray-600">start: {event.time}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-4">
+                                                {event.tag && (
+                                                    <span className="text-xs uppercase tracking-wider px-3 py-1 bg-blue text-white">
+                                                        {event.tag}
+                                                    </span>
+                                                )}
+                                                <a href="tel:+31202238553" className="text-blue font-medium hover:underline">
+                                                    reserveer →
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Contact */}
+                    <section id="contact" className="py-24 px-6 bg-cream">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="blue-line mb-2"></div>
+                            <div className="blue-line-short mb-12"></div>
+
+                            <h2 className="heading mb-12 text-center">kom langs</h2>
+
+                            <div className="grid md:grid-cols-3 gap-8 mb-12">
+                                <div className="paper-card p-8 text-center">
+                                    <h3 className="text-sm uppercase tracking-widest text-blue mb-4 font-medium">adres</h3>
+                                    <p className="text-dark mb-1">linnaeuskade 1-ah</p>
+                                    <p className="text-dark mb-4">1098 bc amsterdam</p>
+                                    <a href="https://maps.google.com/?q=Linnaeuskade+1-AH+Amsterdam" target="_blank" className="text-blue text-sm hover:underline">
+                                        route →
+                                    </a>
+                                </div>
+
+                                <div className="paper-card p-8 text-center">
+                                    <h3 className="text-sm uppercase tracking-widest text-blue mb-4 font-medium">open</h3>
+                                    <div className="space-y-1 text-sm">
+                                        <p>ma-di: <span className="opacity-50">gesloten</span></p>
+                                        <p>wo-do: <span className="font-medium">16:00-01:00</span></p>
+                                        <p>vr-za: <span className="font-medium">16:00-03:00</span></p>
+                                        <p>zo: <span className="font-medium">16:00-01:00</span></p>
+                                    </div>
+                                </div>
+
+                                <div className="paper-card p-8 text-center">
+                                    <h3 className="text-sm uppercase tracking-widest text-blue mb-4 font-medium">contact</h3>
+                                    <p className="mb-1"><a href="tel:+31202238553" className="hover:text-blue">020 - 2238553</a></p>
+                                    <p className="mb-1"><a href="tel:+31611000670" className="hover:text-blue">06 - 11000670</a></p>
+                                    <p><a href="mailto:mark@baraandekade.nl" className="text-blue text-sm hover:underline">email</a></p>
+                                </div>
+                            </div>
+
+                            {/* Map */}
+                            <div className="paper-card overflow-hidden">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2436.2918364891!2d4.917304776706383!3d52.361473571987644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c6099c7c7c7c7d%3A0x7c7c7c7c7c7c7c7c!2sLinnaeuskade%201%2C%201098%20BC%20Amsterdam!5e0!3m2!1sen!2snl!4v1699999999999!5m2!1sen!2snl"
+                                    width="100%"
+                                    height="500"
+                                    style={{ border: 0 }}
+                                    allowFullScreen=""
+                                    loading="lazy">
+                                </iframe>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="wood-bg py-12 px-6">
+                        <div className="max-w-6xl mx-auto text-center">
+                            <div className="logo-text text-cream mb-2">bar aan de</div>
+                            <div className="logo-kade text-cream mb-6" style={{ WebkitTextStroke: '1.5px #f5f1e8', WebkitTextFillColor: 'transparent' }}>kade</div>
+                            <p className="text-cream opacity-75 text-sm mb-6">buurtbar • amsterdam oost</p>
+                            <div className="flex justify-center gap-6 mb-8">
+                                <a href="#" className="text-cream opacity-75 hover:opacity-100">
+                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                    </svg>
+                                </a>
+                                <a href="#" className="text-cream opacity-75 hover:opacity-100">
+                                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <p className="text-cream opacity-50 text-xs">© 2024 • gemaakt door mark voor de buurt</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<BarAanDeKade />, document.getElementById('root'));
+    </script>
+</body>
+
+</html>
