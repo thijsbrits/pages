@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bar Aan de Kade</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/react.production.min.js"></script>
+    <script src="assets/react-dom.production.min.js"></script>
+    <script src="assets/babel.min.js"></script>
+    <script src="assets/tailwind.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
@@ -444,17 +444,7 @@
                         </div>
                     </div>
 
-                    {/* Today's Special */}
-                    {!weekMenu[todayKey].closed && (
-                        <div className="py-16 px-6 bg-blue">
-                            <div className="max-w-4xl mx-auto text-center text-white">
-                                <p className="text-sm uppercase tracking-widest mb-4 opacity-90">vandaag • {weekMenu[todayKey].name}</p>
-                                <h2 className="text-4xl md:text-5xl font-light mb-4">{weekMenu[todayKey].dish}</h2>
-                                <p className="text-lg mb-6 opacity-90">{weekMenu[todayKey].desc}</p>
-                                <p className="text-4xl font-light">€{weekMenu[todayKey].price}</p>
-                            </div>
-                        </div>
-                    )}
+
 
                     {/* Het Verhaal */}
                     <section id="verhaal" className="py-24 px-6 bg-cream">
@@ -485,7 +475,7 @@
 
                                 <div className="paper-card p-8">
                                     <img
-                                        src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80"
+                                        src="https://static.wixstatic.com/media/0b6c9c_3e3f1a563afa43a69325a9fb93c40c01~mv2.jpg/v1/fit/w_2901,h_2325,q_90,enc_avif,quality_auto/0b6c9c_3e3f1a563afa43a69325a9fb93c40c01~mv2.jpg"
                                         alt="Bar interior"
                                         className="w-full h-80 object-cover mb-4"
                                     />
