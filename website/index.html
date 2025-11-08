@@ -1,1 +1,137 @@
-hello world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thijs Brits</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: linear-gradient(135deg, #f4f1e8 0%, #e8e5dc 100%);
+            color: #2a2a2a;
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            /* background: #fefdfb; */
+            padding: 3rem 2rem;
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-radius: 2px; */
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            /* border: 3px solid #2a2a2a; */
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .profile img:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: normal;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #2a2a2a;
+            padding-bottom: 0.5rem;
+            letter-spacing: 0.08em;
+        }
+        h3 {
+            font-size: 1.2rem;
+            font-weight: normal;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.08em;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        a {
+            color: #2a2a2a;
+            text-decoration: underline;
+            transition: all 0.2s ease;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+        }
+
+        a:hover {
+            background: #2a2a2a;
+            color: #fefdfb;
+            padding: 2px 6px;
+            text-decoration: none;
+        }
+
+        .date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+        }
+
+        ul {
+            margin-left: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile">
+            <img src="img/profile_picture_thijs.jpg" alt="Profile Picture">
+        </div>
+        
+        <h1>Thijs Brits</h1>
+        <div class="date">ex-Adyen Engineering Manager & Data/AI Engineer</div>
+        
+        <br>
+        <h3>
+            What I do:
+        </h3>
+        <br>
+
+        <ul>
+            <li>
+                <strong>Setting up data platforms</strong> from scratch for startups.
+            </li>
+
+            <li>
+                <strong>Managing startup engineering teams</strong>, helping them to go 0 -> 1
+            </li>
+            
+            <li>
+                <strong>Advising companies</strong> on how to leverage AI.
+            </li>
+            
+            <li>
+                Sometimes I <strong>remake SMB websites</strong> for fun, like 
+                <a href="bar-aan-de-kade.html">this local bar</a>.
+            </li>
+        </ul>
+        <br>
+
+    <p>
+        Connect with me on <a href="https://www.linkedin.com/in/thijsbrits/" target="_blank">LinkedIn</a> or <a href="https://github.com/thijsbrits" target="_blank">GitHub</a>.
+    </p>
+    </div>
+</body>
+</html>
